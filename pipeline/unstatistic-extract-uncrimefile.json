@@ -36,7 +36,62 @@
 						"type": "AzureSqlSink",
 						"disableMetricsCollection": false
 					},
-					"enableStaging": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "RegionName",
+									"type": "String"
+								},
+								"sink": {
+									"name": "RegionName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SubRegionName",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SubRegionName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CountryName",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CountryName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Year",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Year",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Count",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Count",
+									"type": "String"
+								}
+							}
+						]
+					}
 				},
 				"inputs": [
 					{
@@ -160,16 +215,13 @@
 		},
 		"variables": {
 			"container": {
-				"type": "String",
-				"defaultValue": "Unstatisticsourcedata"
+				"type": "String"
 			},
 			"filepath": {
-				"type": "String",
-				"defaultValue": "UNCrime"
+				"type": "String"
 			},
 			"filename": {
-				"type": "String",
-				"defaultValue": "bribery"
+				"type": "String"
 			}
 		},
 		"annotations": []
