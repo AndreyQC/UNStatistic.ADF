@@ -1,0 +1,13 @@
+{
+	"name": "ds_dst_dummy",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
