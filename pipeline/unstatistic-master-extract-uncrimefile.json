@@ -41,7 +41,14 @@
 			{
 				"name": "SP Log Pipeline End",
 				"type": "SqlServerStoredProcedure",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -154,26 +161,6 @@
 				}
 			},
 			{
-				"name": "Set filename",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Get configuration",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "filename",
-					"value": {
-						"value": "@pipeline().parameters.filename",
-						"type": "Expression"
-					}
-				}
-			},
-			{
 				"name": "Truncate  uncrime_untyped",
 				"type": "Lookup",
 				"dependsOn": [
@@ -185,12 +172,6 @@
 					},
 					{
 						"activity": "Set path",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "Set filename",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -237,10 +218,12 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "ds_src_csv_countryref",
+						"referenceName": "ds_src_csv_metadata",
 						"type": "DatasetReference"
 					},
-					"fieldList": [],
+					"fieldList": [
+						"childItems"
+					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
 						"recursive": true
@@ -248,6 +231,40 @@
 					"formatSettings": {
 						"type": "DelimitedTextReadSettings"
 					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get Metadata1').output.childitems",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "filename",
+								"value": {
+									"value": "@{item().FileName}",
+									"type": "Expression"
+								}
+							}
+						}
+					]
 				}
 			}
 		],
