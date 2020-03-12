@@ -1,0 +1,24 @@
+{
+	"name": "ds_src_csv_metadata",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "UNstatisticBLOBLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "UNCrime",
+				"container": "unstatisticsourcedata"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

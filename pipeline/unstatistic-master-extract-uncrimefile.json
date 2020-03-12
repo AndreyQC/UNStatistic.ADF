@@ -1,137 +1,7 @@
 {
-	"name": "unstatistic-extract-uncrimefile",
+	"name": "unstatistic-master-extract-uncrimefile",
 	"properties": {
 		"activities": [
-			{
-				"name": "Copy uncrimefile",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Set container",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "Set path",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "Set filename",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
-							"recursive": true
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
-					},
-					"sink": {
-						"type": "AzureSqlSink",
-						"disableMetricsCollection": false
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "RegionName",
-									"type": "String"
-								},
-								"sink": {
-									"name": "RegionName",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "SubRegionName",
-									"type": "String"
-								},
-								"sink": {
-									"name": "SubRegionName",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "CountryName",
-									"type": "String"
-								},
-								"sink": {
-									"name": "CountryName",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Year",
-									"type": "String"
-								},
-								"sink": {
-									"name": "Year",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Count",
-									"type": "String"
-								},
-								"sink": {
-									"name": "Count",
-									"type": "String"
-								}
-							}
-						]
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "ds_src_csv_uncrimefile",
-						"type": "DatasetReference",
-						"parameters": {
-							"container": {
-								"value": "@variables('container')",
-								"type": "Expression"
-							},
-							"path": {
-								"value": "@variables('filepath')",
-								"type": "Expression"
-							},
-							"filename": {
-								"value": "@variables('filename')",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "ds_dst_staging_uncrime",
-						"type": "DatasetReference"
-					}
-				]
-			},
 			{
 				"name": "SP Log Pipeline start",
 				"type": "SqlServerStoredProcedure",
@@ -171,14 +41,7 @@
 			{
 				"name": "SP Log Pipeline End",
 				"type": "SqlServerStoredProcedure",
-				"dependsOn": [
-					{
-						"activity": "Update file name",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -311,11 +174,23 @@
 				}
 			},
 			{
-				"name": "Update file name",
+				"name": "Truncate  uncrime_untyped",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy uncrimefile",
+						"activity": "Set container",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set path",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set filename",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -332,7 +207,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "\n  UPDATE [staging].[uncrime_untyped]\n  SET [FileName] = 'bribery'\n  WHERE [FileName] IS NULL\nSELECT 1;",
+						"sqlReaderQuery": "  TRUNCATE TABLE [staging].[uncrime_untyped];\nSELECT 1;",
 						"queryTimeout": "02:00:00"
 					},
 					"dataset": {
@@ -340,13 +215,42 @@
 						"type": "DatasetReference"
 					}
 				}
+			},
+			{
+				"name": "Get Metadata1",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "Truncate  uncrime_untyped",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_src_csv_countryref",
+						"type": "DatasetReference"
+					},
+					"fieldList": [],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
 			}
 		],
-		"parameters": {
-			"filename": {
-				"type": "string"
-			}
-		},
 		"variables": {
 			"container": {
 				"type": "String"
