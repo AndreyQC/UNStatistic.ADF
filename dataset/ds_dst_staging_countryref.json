@@ -5,6 +5,9 @@
 			"referenceName": "LinkedService",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "DST"
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
