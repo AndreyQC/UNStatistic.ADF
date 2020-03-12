@@ -1,0 +1,266 @@
+{
+	"name": "unstatistic-extract-uncrimefile",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy uncrimefile",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "SP Log Pipeline start",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "TRUNCATE  TABLE  [staging].[countriesref_untyped]",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "alpha-2",
+									"type": "String"
+								},
+								"sink": {
+									"name": "alpha-2",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "alpha-3",
+									"type": "String"
+								},
+								"sink": {
+									"name": "alpha-3",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "country-code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "country-code",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "iso_3166-2",
+									"type": "String"
+								},
+								"sink": {
+									"name": "iso_3166-2",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "region",
+									"type": "String"
+								},
+								"sink": {
+									"name": "region",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "sub-region",
+									"type": "String"
+								},
+								"sink": {
+									"name": "sub-region",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "intermediate-region",
+									"type": "String"
+								},
+								"sink": {
+									"name": "intermediate-region",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "region-code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "region-code",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "sub-region-code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "sub-region-code",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "intermediate-region-code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "intermediate-region-code",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_src_csv_uncrimefile",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_dst_staging_countryref",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "SP Log Pipeline start",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[adf].[usp_PipelineExecutionHistory_Create]",
+					"storedProcedureParameters": {
+						"PipelineName": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"PipelineRunId": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LinkedService",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "SP Log Pipeline End",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy uncrimefile",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[adf].[usp_PipelineExecutionHistory_Update]",
+					"storedProcedureParameters": {
+						"Description": {
+							"value": "desc1",
+							"type": "String"
+						},
+						"PipelineName": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"PipelineRunId": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Status": {
+							"value": "",
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LinkedService",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"filename": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
