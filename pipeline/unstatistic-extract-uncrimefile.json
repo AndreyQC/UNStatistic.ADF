@@ -34,135 +34,33 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "TRUNCATE  TABLE  [staging].[countriesref_untyped]",
 						"disableMetricsCollection": false
 					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "name",
-									"type": "String"
-								},
-								"sink": {
-									"name": "name",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "alpha-2",
-									"type": "String"
-								},
-								"sink": {
-									"name": "alpha-2",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "alpha-3",
-									"type": "String"
-								},
-								"sink": {
-									"name": "alpha-3",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "country-code",
-									"type": "String"
-								},
-								"sink": {
-									"name": "country-code",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "iso_3166-2",
-									"type": "String"
-								},
-								"sink": {
-									"name": "iso_3166-2",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "region",
-									"type": "String"
-								},
-								"sink": {
-									"name": "region",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "sub-region",
-									"type": "String"
-								},
-								"sink": {
-									"name": "sub-region",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "intermediate-region",
-									"type": "String"
-								},
-								"sink": {
-									"name": "intermediate-region",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "region-code",
-									"type": "String"
-								},
-								"sink": {
-									"name": "region-code",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "sub-region-code",
-									"type": "String"
-								},
-								"sink": {
-									"name": "sub-region-code",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "intermediate-region-code",
-									"type": "String"
-								},
-								"sink": {
-									"name": "intermediate-region-code",
-									"type": "String"
-								}
-							}
-						]
-					}
+					"enableStaging": false
 				},
 				"inputs": [
 					{
 						"referenceName": "ds_src_csv_uncrimefile",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"container": {
+								"value": "@variables('container')",
+								"type": "Expression"
+							},
+							"path": {
+								"value": "@variables('filepath')",
+								"type": "Expression"
+							},
+							"filename": {
+								"value": "@variables('filename')",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_dst_staging_countryref",
+						"referenceName": "ds_dst_staging_uncrime",
 						"type": "DatasetReference"
 					}
 				]
@@ -258,6 +156,20 @@
 		"parameters": {
 			"filename": {
 				"type": "string"
+			}
+		},
+		"variables": {
+			"container": {
+				"type": "String",
+				"defaultValue": "Unstatisticsourcedata"
+			},
+			"filepath": {
+				"type": "String",
+				"defaultValue": "UNCrime"
+			},
+			"filename": {
+				"type": "String",
+				"defaultValue": "bribery"
 			}
 		},
 		"annotations": []
