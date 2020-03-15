@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy popelation",
+				"name": "Copy population",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -787,7 +787,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Copy popelation",
+						"activity": "Copy population",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -797,7 +797,7 @@
 				"typeProperties": {
 					"variableName": "pipelinedescription",
 					"value": {
-						"value": "@{activity('Copy countries').Error.Message}",
+						"value": "@{activity('Copy population').Error.Message}\n\n",
 						"type": "Expression"
 					}
 				}
@@ -807,7 +807,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Copy popelation",
+						"activity": "Copy population",
 						"dependencyConditions": [
 							"Succeeded"
 						]
