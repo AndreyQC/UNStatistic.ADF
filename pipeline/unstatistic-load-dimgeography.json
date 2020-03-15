@@ -102,7 +102,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "dataflow1",
+						"activity": "df_dimgeography",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -112,7 +112,7 @@
 				"typeProperties": {
 					"variableName": "pipelinedescription",
 					"value": {
-						"value": "@{activity('Copy countries').Error.Message}",
+						"value": "@{activity('df_dimgeography').Error.Message}\n",
 						"type": "Expression"
 					}
 				}
@@ -122,7 +122,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "dataflow1",
+						"activity": "df_dimgeography",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -152,7 +152,7 @@
 				}
 			},
 			{
-				"name": "dataflow1",
+				"name": "df_dimgeography",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
