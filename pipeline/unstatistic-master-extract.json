@@ -47,6 +47,12 @@
 						"dependencyConditions": [
 							"Succeeded"
 						]
+					},
+					{
+						"activity": "unstatistic-master-extract-uncrimefile",
+						"dependencyConditions": [
+							"Succeeded"
+						]
 					}
 				],
 				"policy": {
@@ -104,6 +110,26 @@
 				"typeProperties": {
 					"pipeline": {
 						"referenceName": "unstatistic-extract-countries",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "unstatistic-master-extract-uncrimefile",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "SP Log Pipeline start",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "unstatistic-master-extract-uncrimefile",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true

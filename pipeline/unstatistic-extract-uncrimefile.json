@@ -356,6 +356,12 @@
 			},
 			"filename": {
 				"type": "String"
+			},
+			"pipelinestatus": {
+				"type": "String"
+			},
+			"pipelinedescription": {
+				"type": "String"
 			}
 		},
 		"annotations": []
