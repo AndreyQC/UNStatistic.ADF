@@ -208,8 +208,16 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "Copy countries",
+						"activity": "Set Status On Success",
 						"dependencyConditions": [
+							"Skipped",
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set Status On Failure",
+						"dependencyConditions": [
+							"Skipped",
 							"Succeeded"
 						]
 					}
@@ -253,8 +261,70 @@
 					"referenceName": "LinkedService",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "Set Failure Description",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Copy countries",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "pipelinedescription",
+					"value": {
+						"value": "@{activity('Copy countries').Error.Message}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set Status On Success",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Copy countries",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "pipelinestatus",
+					"value": "Completed"
+				}
+			},
+			{
+				"name": "Set Status On Failure",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set Failure Description",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "pipelinestatus",
+					"value": "Failed"
+				}
 			}
 		],
+		"variables": {
+			"pipelinestatus": {
+				"type": "String"
+			},
+			"pipelinedescription": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
