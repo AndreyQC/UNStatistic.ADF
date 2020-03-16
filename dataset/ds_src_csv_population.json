@@ -1,0 +1,27 @@
+{
+	"name": "ds_src_csv_population",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "UNstatisticBLOBLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "API_SP.POP.TOTL_DS2_en_csv_v2_713131_-_edit.csv",
+				"folderPath": "Worldbank",
+				"container": "unstatisticsourcedata"
+			},
+			"columnDelimiter": "|",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"type": "String"
+			}
+		]
+	}
+}
