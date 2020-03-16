@@ -1,5 +1,5 @@
 {
-	"name": "unstatistic-master-extract",
+	"name": "unstatistic-load-geography",
 	"properties": {
 		"activities": [
 			{
@@ -43,19 +43,7 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "unstatistic-extract-countries",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "unstatistic-master-extract-uncrimefile",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "unstatistic-extract-population",
+						"activity": "dataflow load dimgeography",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -102,8 +90,8 @@
 				}
 			},
 			{
-				"name": "unstatistic-extract-countries",
-				"type": "ExecutePipeline",
+				"name": "dataflow load dimgeography",
+				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
 						"activity": "SP Log Pipeline start",
@@ -112,56 +100,34 @@
 						]
 					}
 				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"pipeline": {
-						"referenceName": "unstatistic-extract-countries",
-						"type": "PipelineReference"
+					"dataflow": {
+						"referenceName": "df_load_dimgeography",
+						"type": "DataFlowReference"
 					},
-					"waitOnCompletion": true
-				}
-			},
-			{
-				"name": "unstatistic-master-extract-uncrimefile",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "SP Log Pipeline start",
-						"dependencyConditions": [
-							"Succeeded"
-						]
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
 					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "unstatistic-master-extract-uncrimefile",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true
-				}
-			},
-			{
-				"name": "unstatistic-extract-population",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "SP Log Pipeline start",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "unstatistic-extract-population",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true
 				}
 			}
 		],
+		"variables": {
+			"pipelinestatus": {
+				"type": "String"
+			},
+			"pipelinedescription": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"

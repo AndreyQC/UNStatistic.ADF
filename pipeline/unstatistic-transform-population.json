@@ -1,5 +1,5 @@
 {
-	"name": "unstatistic-master-extract",
+	"name": "unstatistic-transform-population",
 	"properties": {
 		"activities": [
 			{
@@ -43,19 +43,13 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "unstatistic-extract-countries",
+						"activity": "SP Log Pipeline start_copy1 DO NOT RUN",
 						"dependencyConditions": [
 							"Succeeded"
 						]
 					},
 					{
-						"activity": "unstatistic-master-extract-uncrimefile",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "unstatistic-extract-population",
+						"activity": "SP Log Pipeline start_copy1_copy1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -102,8 +96,8 @@
 				}
 			},
 			{
-				"name": "unstatistic-extract-countries",
-				"type": "ExecutePipeline",
+				"name": "SP Log Pipeline start_copy1 DO NOT RUN",
+				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
 						"activity": "SP Log Pipeline start",
@@ -112,18 +106,41 @@
 						]
 					}
 				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"pipeline": {
-						"referenceName": "unstatistic-extract-countries",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true
+					"storedProcedureName": "[adf].[usp_PipelineExecutionHistory_Create]",
+					"storedProcedureParameters": {
+						"PipelineName": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"PipelineRunId": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LinkedService",
+					"type": "LinkedServiceReference"
 				}
 			},
 			{
-				"name": "unstatistic-master-extract-uncrimefile",
-				"type": "ExecutePipeline",
+				"name": "SP Log Pipeline start_copy1_copy1",
+				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
 						"activity": "SP Log Pipeline start",
@@ -132,36 +149,47 @@
 						]
 					}
 				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"pipeline": {
-						"referenceName": "unstatistic-master-extract-uncrimefile",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true
-				}
-			},
-			{
-				"name": "unstatistic-extract-population",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "SP Log Pipeline start",
-						"dependencyConditions": [
-							"Succeeded"
-						]
+					"storedProcedureName": "[adf].[usp_PipelineExecutionHistory_Create]",
+					"storedProcedureParameters": {
+						"PipelineName": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"PipelineRunId": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
 					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "unstatistic-extract-population",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true
+				},
+				"linkedServiceName": {
+					"referenceName": "LinkedService",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
+		"variables": {
+			"pipelinestatus": {
+				"type": "String"
+			},
+			"pipelinedescription": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"

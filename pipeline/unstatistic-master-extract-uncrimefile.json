@@ -250,9 +250,10 @@
 						"value": "@activity('Get Metadata1').output.childitems",
 						"type": "Expression"
 					},
+					"isSequential": false,
 					"activities": [
 						{
-							"name": "Set variable1",
+							"name": "Set filename",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"userProperties": [],
@@ -265,11 +266,11 @@
 							}
 						},
 						{
-							"name": "Execute Pipeline1",
+							"name": "unstatistic-extract-uncrimefile",
 							"type": "ExecutePipeline",
 							"dependsOn": [
 								{
-									"activity": "Set variable1",
+									"activity": "Set filename",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -284,7 +285,7 @@
 								"waitOnCompletion": true,
 								"parameters": {
 									"filename": {
-										"value": "@variables('filename')",
+										"value": "@{replace(variables('filename'),'.csv','')}",
 										"type": "Expression"
 									}
 								}
