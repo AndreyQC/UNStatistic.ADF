@@ -210,12 +210,14 @@
 					{
 						"activity": "Set status completed",
 						"dependencyConditions": [
+							"Skipped",
 							"Succeeded"
 						]
 					},
 					{
-						"activity": "Set description",
+						"activity": "Set status  failed",
 						"dependencyConditions": [
+							"Skipped",
 							"Succeeded"
 						]
 					}
@@ -282,9 +284,9 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Copy countries",
+						"activity": "Set description",
 						"dependencyConditions": [
-							"Failed"
+							"Succeeded"
 						]
 					}
 				],
@@ -299,16 +301,19 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Set status  failed",
+						"activity": "Copy countries",
 						"dependencyConditions": [
-							"Succeeded"
+							"Failed"
 						]
 					}
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "pipelinestatus",
-					"value": "completed"
+					"variableName": "pipelinedescription",
+					"value": {
+						"value": "@{activity('Copy countries').Error.Message}",
+						"type": "Expression"
+					}
 				}
 			}
 		],
