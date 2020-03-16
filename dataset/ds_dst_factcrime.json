@@ -1,0 +1,64 @@
+{
+	"name": "ds_dst_factcrime",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "FactCrimeKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DimGeographyKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DimDateKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DimCrimeTypeKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NumberOfCrime",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "sysCreatedAt",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "sysChangedAt",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "sysChangedBy",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "sysCreatedBy",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dwh",
+			"table": "FactCrime"
+		}
+	}
+}
