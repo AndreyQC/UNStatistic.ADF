@@ -332,7 +332,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "\n  UPDATE [staging].[uncrime_untyped]\n  SET [FileName] = 'bribery'\n  WHERE [FileName] IS NULL\nSELECT 1;",
+						"sqlReaderQuery": {
+							"value": "@replace('UPDATE [staging].[uncrime_untyped]\n  SET [FileName] = ''variablefilename''\n  WHERE [FileName] IS NULL\nSELECT 1;'\n, 'variablefilename'\n,variables('filename') \n)",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00"
 					},
 					"dataset": {
