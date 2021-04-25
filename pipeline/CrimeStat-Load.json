@@ -1,0 +1,23 @@
+{
+	"name": "CrimeStat-Load",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute_Source-Country-Load-Staging",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Source-Country-Load-Staging",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2019-05-21T05:57:30Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

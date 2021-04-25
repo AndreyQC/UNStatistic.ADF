@@ -1,0 +1,11 @@
+{
+	"name": "crimestatkevalinkedservice",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://crimestatkevaapdev.vault.azure.net/"
+		}
+	}
+}

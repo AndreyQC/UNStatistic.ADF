@@ -1,0 +1,9 @@
+{
+	"name": "crimestatdafaapdev",
+	"location": "westeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "640066d2-0273-456b-8961-3bfcdb41c33a",
+		"tenantId": "73905820-474e-4cd3-81ed-7414a2cb98a6"
+	}
+}
